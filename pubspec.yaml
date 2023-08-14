@@ -1,0 +1,55 @@
+name: text1
+description: A new Flutter project.
+
+publish_to: 'none'
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.1 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  image_picker: ^0.8.4+4
+  permission_handler: ^10.4.1
+  image_gallery_saver: ^2.0.3
+  firebase_core: ^2.15.0
+  firebase_auth: ^4.7.2
+  cloud_firestore: ^4.8.4
+  provider: ^6.0.5
+  flutter_spinkit: ^5.2.0
+  firebase_storage: ^11.2.5
+  http: ^1.1.0
+  shared_preferences: ^2.2.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+  fonts:
+
+    - family: Poppins
+      fonts:
+        - asset: fonts/d.ttf
+    - family: Open Sans
+      fonts:
+        - asset: fonts/a.ttf
+    - family: Oswald
+      fonts:
+        - asset: fonts/c.ttf
+    - family: Caprasimo
+      fonts:
+        - asset: fonts/b.ttf
+
+
+  uses-material-design: true
+
+
+
+
