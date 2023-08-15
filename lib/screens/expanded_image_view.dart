@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ExpandedImageView extends StatelessWidget {
   final String imageUrl;
 
-  ExpandedImageView({required this.imageUrl});
+  const ExpandedImageView({super.key, required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {

@@ -12,8 +12,8 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:text1/models/consumer.dart';
-import 'package:text1/screens/expandedImageView.dart';
-import 'package:text1/screens/phoneSignIn.dart';
+import 'package:text1/screens/expanded_image_view.dart';
+import 'package:text1/screens/phone_sign_in.dart';
 import 'package:text1/services/auth.dart';
 import 'package:text1/services/database.dart';
 import 'package:http/http.dart' as http;
@@ -72,8 +72,6 @@ class TextInputScreenState extends State<TextInputScreen> {
     super.dispose();
   }
 
-
-
   String? vendorCodeFontFamily;
   String? addressFontFamily;
   String? vendorNameFontFamily;
@@ -123,14 +121,7 @@ class TextInputScreenState extends State<TextInputScreen> {
   String? _selectedImage;
 
   final ImagePicker _picker = ImagePicker();
-  // Future _pickImage() async {
-  //   final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-  //   if (pickedFile != null) {
-  //     setState(() {
-  //       _selectedImage = File(pickedFile.path);
-  //     });
-  //   }
-  // }
+
   List<File> _selectedImages = [];
   Future _addSmallLogo() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -205,16 +196,7 @@ class TextInputScreenState extends State<TextInputScreen> {
     );
   }
 
-  // Future<void> _downloadAndSetSelectedImage(String imageUrl) async {
-  //   try {
-  //     http.Response response = await http.get(Uri.parse(imageUrl));
-  //     setState(() {
-  //       _selectedImage = File.fromRawPath(response.bodyBytes);
-  //     });
-  //   } catch (e) {
-  //     print('Error downloading image: $e');
-  //   }
-  // }
+
 
 
 
@@ -245,7 +227,7 @@ class TextInputScreenState extends State<TextInputScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PhoneSignIn(),
+                  builder: (context) => const PhoneSignIn(),
                 ),
               );
             },
@@ -265,10 +247,6 @@ class TextInputScreenState extends State<TextInputScreen> {
                 key: stackKey,
                 child: Stack(
                   children: <Widget>[
-                    // _selectedImage != null
-                    // ?Image.file(_selectedImage!,
-                    //     width: double.infinity,
-                    //     fit: BoxFit.fill):Container(),
                     Image.network(_selectedImage!,
                         width: double.infinity,
                         fit: BoxFit.fill),
@@ -466,7 +444,6 @@ class TextInputScreenState extends State<TextInputScreen> {
                       onChanged: (value) {
                         setState(() {
                           inputAddress = value;
-                          print('The user entered: $inputAddress');
                         });
                       },
                       onTap: () {
@@ -532,7 +509,6 @@ class TextInputScreenState extends State<TextInputScreen> {
                       onChanged: (value) {
                         setState(() {
                           inputName = value;
-                          print('The user entered: $inputName');
                         });
                       },
                       onTap: () {
@@ -796,17 +772,15 @@ class TextInputScreenState extends State<TextInputScreen> {
                                   Uint8List bytes = byteData!.buffer.asUint8List();
                                    if(user!= null)
                                    {
-                                     final String imageName = DateTime.now().millisecondsSinceEpoch.toString() + '.png';
+                                     final String imageName = '${DateTime.now().millisecondsSinceEpoch}.png';
                                    firebase_storage.Reference storageReference = firebase_storage.FirebaseStorage.instance.ref().child('images/$imageName');
                                    firebase_storage.UploadTask uploadTask = storageReference.putData(bytes);
 
                                    await uploadTask.whenComplete(() async {
                                      String imageUrl = await storageReference.getDownloadURL();
                                      DatabaseService(uid: user.uid).updateConsumerDataWithImage(imageUrl);
-                                     // and also saved to the gallery if needed
                                    });
                                    }
-                                  // uploading to firestore storage
 
 
                                   // Save the image to the gallery
