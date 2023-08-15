@@ -1,4 +1,11 @@
-# Poster Pal - Modern Poster Maker App
+
+<div align="center">
+  <h1>Poster Pal</h1>
+  <p>Modern Poster Maker App</p>
+</div>
+<div align="center">
+  <img src="screenshots/preview.png" alt="App Preview" width="400">
+</div>
 
 ![Poster Pal Logo](file:///C:/Users/DELL/Downloads/icons%20and%20fonts/DALL%C2%B7E%202023-08-11%2019.28.13%20-%20a%20modern%20pastel%20style%20app%20icon%20for%20a%20poster%20maker%20icon%20with%20no%20text.png)
 
