@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:text1/consumer.dart';
+import 'package:text1/models/consumer.dart';
 import 'package:text1/services/database.dart';
 
 class AuthService {
@@ -13,7 +12,6 @@ class AuthService {
     } else {
       return Cansumer(
         uid: user.uid,
-        // Other properties of the Patient object.
       );
     }
   }
@@ -24,7 +22,7 @@ class AuthService {
   }
 
 
-
+  // register with email and password
   Future registerWithEmailAndPassword(String email, String password, String userName ) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
@@ -39,7 +37,6 @@ class AuthService {
   }
 
 
-
   // sign in with email and password
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
@@ -51,6 +48,7 @@ class AuthService {
       return null;
     }
   }
+  //sign out
   Future signOut() async {
     try {
       return await _auth.signOut();

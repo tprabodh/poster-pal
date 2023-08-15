@@ -1,9 +1,9 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:text1/constants.dart';
-import 'package:text1/phoneOtp.dart';
-import 'package:text1/services/auth.dart';
-import 'package:text1/textInputScreen.dart';
+import 'package:text1/constants/constants.dart';
+import 'package:text1/screens/phone_otp.dart';
+
 
 
 class PhoneSignIn extends StatefulWidget {
@@ -28,34 +28,33 @@ class _PhoneSignInState extends State<PhoneSignIn> {
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
-        title: Text('Enter Your Mobile Number'),
+        title: const Text('Enter Your Mobile Number'),
       ),
       body: Container(
-        margin: EdgeInsets.only(left: 25, right: 25),
+        margin: const EdgeInsets.only(left: 25, right: 25),
         alignment: Alignment.center,
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 "Phone Verification",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 "We need to register your phone before getting started!",
                 style: TextStyle(
                   fontSize: 16,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
-
               Container(
                 height: 55,
                 decoration: BoxDecoration(
@@ -64,7 +63,7 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     SizedBox(
@@ -75,18 +74,18 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                             countryCode = value;
                           });
                         },
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: '+91',
                           contentPadding: EdgeInsets.zero,
                           border: InputBorder.none,
                         ),
                       ),
                     ),
-                    Text(
+                    const Text(
                       "|",
                       style: TextStyle(fontSize: 33, color: Colors.grey),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Expanded(
@@ -101,21 +100,15 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                   ],
                 ),
               ),
-
-
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               ElevatedButton(
-                  child: Text(
-                    'Get otp',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.cyan[400], // Text color
                     elevation: 4, // Elevation
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6), // Rounded edges
-                      side: BorderSide(
+                      side: const BorderSide(
                           color: Colors.black, width: 1.0), // Small black border
                     ),
                   ),
@@ -129,25 +122,29 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => PhoneOtp(),
+                            builder: (context) => const PhoneOtp(),
                           ),
                         );
                         PhoneSignIn.verify=verificationId;
                       },
                       codeAutoRetrievalTimeout: (String verificationId) {
-                        print('time out');
                       },
                     );
                     }
-                    else(){
+                    else {
+                      (){
                       setState(() {
                         error="enter a valid phone number";
                       });
                     };
-                  }
+                    }
+                  },
+                  child: const Text(
+                    'Get otp',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  )
               ),
-              SizedBox(height: 12.0),
-
+              const SizedBox(height: 12.0),
             ],
           ),
         ),

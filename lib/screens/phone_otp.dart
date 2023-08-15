@@ -1,14 +1,13 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:text1/constants.dart';
-import 'package:text1/consumer.dart';
-import 'package:text1/phoneSignIn.dart';
+import 'package:text1/constants/constants.dart';
+import 'package:text1/models/consumer.dart';
+import 'package:text1/screens/phone_sign_in.dart';
 import 'package:text1/services/auth.dart';
 import 'package:text1/services/database.dart';
-import 'package:text1/textInputScreen.dart';
+import 'package:text1/screens/text_Input_screen.dart';
 
 class PhoneOtp extends StatefulWidget {
   const PhoneOtp({Key? key}) : super(key: key);
@@ -30,18 +29,18 @@ class _PhoneOtpState extends State<PhoneOtp> {
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
-        title: Text('Enter Your OTP'),
+        title: const Text('Enter Your OTP'),
       ),
       body: Container(
-        margin: EdgeInsets.only(left: 25, right: 25),
+        margin: const EdgeInsets.only(left: 25, right: 25),
         alignment: Alignment.center,
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Enter Your OTP',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
-              SizedBox(height: 10,),
+              const Text('Enter Your OTP',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
+              const SizedBox(height: 10,),
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: 'Enter your otp'),
                 validator: (val) => val!.isEmpty ? 'Enter an otp' : null,
@@ -51,17 +50,13 @@ class _PhoneOtpState extends State<PhoneOtp> {
                 },
               ),
               ElevatedButton(
-                  child: Text(
-                    'verify',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.cyan[400], // Text color
                     elevation: 4, // Elevation
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6), // Rounded edges
-                      side: BorderSide(
+                      side: const BorderSide(
                           color: Colors.black, width: 1.0), // Small black border
                     ),
                   ),
@@ -84,10 +79,7 @@ class _PhoneOtpState extends State<PhoneOtp> {
                       subscription?.cancel(); // Cancel the stream subscription
                       if (currentUser != null){
                         // Create a document in the consumers collection with name and empty imageUrls list
-                        String defaultName = "Default Name";
-                        List<String> emptyImageUrls = [];
                         String consumerId=currentUser!.uid;
-                        // DatabaseService(uid: currentUser!.uid).updateConsumerData(defaultName, emptyImageUrls);
                         DatabaseService(uid: currentUser!.uid).updateUserDetails(consumerId);
                         final prefs = await SharedPreferences.getInstance();
                         prefs.setBool('isUserLoggedIn', true);
@@ -95,17 +87,20 @@ class _PhoneOtpState extends State<PhoneOtp> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => TextInputScreen(),
+                            builder: (context) => const TextInputScreen(),
                           ),
                         );
                       }
                     });
 
-                    print('success');
                   } catch (e) {
                     print('Error: $e');
                   }
                 },
+                  child: const Text(
+                    'verify',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
               ),
             ],
           ),

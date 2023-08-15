@@ -26,7 +26,6 @@ class DatabaseService {
     });
   }
 
-  // The method could be defined like this in DatabaseService:
   Future<void> updateConsumerDataWithImage(String imageUrl) async {
     DocumentReference userDocRef = consumerCollection.doc(uid);
 

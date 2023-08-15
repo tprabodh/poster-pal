@@ -2,10 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:text1/firebase_options.dart';
-import 'package:text1/phoneSignIn.dart';
+import 'package:text1/screens/phone_sign_in.dart';
 import 'package:text1/services/auth.dart';
-import 'package:text1/textInputScreen.dart';
-import 'package:text1/consumer.dart';
+import 'package:text1/screens/text_Input_screen.dart';
+import 'package:text1/models/consumer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -24,7 +24,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final bool isUserLoggedIn;
 
-  MyApp({required this.isUserLoggedIn});
+  const MyApp({super.key, required this.isUserLoggedIn});
   @override
   Widget build(BuildContext context) {
     return StreamProvider<Cansumer?>.value(
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       initialData: null,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: isUserLoggedIn ? TextInputScreen() : PhoneSignIn(),
+        home: isUserLoggedIn ? const TextInputScreen() : const PhoneSignIn(),
       ),
     );
   }
