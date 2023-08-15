@@ -47,6 +47,8 @@ Poster Pal is a user-friendly and versatile poster maker app that empowers you t
 
 We welcome your feedback and suggestions for enhancing Poster Pal. If you encounter any issues or have ideas for improvement, please reach out to us at [posterPal@dummymail.com].
 
-
+<div align="center">
+  Made with ❤️ by [PRABODH TEJA]
+</div>
 
 © 2023 TUMMALA PRABODH TEJA. All Rights Reserved.
