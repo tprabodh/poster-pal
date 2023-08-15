@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:text1/constants.dart';
-import 'package:text1/consumer.dart';
-import 'package:text1/phoneSignIn.dart';
+import 'package:text1/constants/constants.dart';
+import 'package:text1/models/consumer.dart';
+import 'package:text1/screens/phoneSignIn.dart';
 import 'package:text1/services/auth.dart';
 import 'package:text1/services/database.dart';
-import 'package:text1/textInputScreen.dart';
+import 'package:text1/screens/textInputScreen.dart';
 
 class PhoneOtp extends StatefulWidget {
   const PhoneOtp({Key? key}) : super(key: key);
@@ -84,10 +84,7 @@ class _PhoneOtpState extends State<PhoneOtp> {
                       subscription?.cancel(); // Cancel the stream subscription
                       if (currentUser != null){
                         // Create a document in the consumers collection with name and empty imageUrls list
-                        String defaultName = "Default Name";
-                        List<String> emptyImageUrls = [];
                         String consumerId=currentUser!.uid;
-                        // DatabaseService(uid: currentUser!.uid).updateConsumerData(defaultName, emptyImageUrls);
                         DatabaseService(uid: currentUser!.uid).updateUserDetails(consumerId);
                         final prefs = await SharedPreferences.getInstance();
                         prefs.setBool('isUserLoggedIn', true);

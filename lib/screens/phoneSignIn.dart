@@ -1,8 +1,8 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:text1/constants.dart';
-import 'package:text1/phoneOtp.dart';
+import 'package:text1/constants/constants.dart';
+import 'package:text1/screens/phoneOtp.dart';
 
 
 

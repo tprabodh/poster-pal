@@ -2,10 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:text1/firebase_options.dart';
-import 'package:text1/phoneSignIn.dart';
+import 'package:text1/screens/phoneSignIn.dart';
 import 'package:text1/services/auth.dart';
-import 'package:text1/textInputScreen.dart';
-import 'package:text1/consumer.dart';
+import 'package:text1/screens/textInputScreen.dart';
+import 'package:text1/models/consumer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
