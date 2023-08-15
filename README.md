@@ -4,10 +4,9 @@
   <p>Modern Poster Maker App</p>
 </div>
 <div align="center">
-  <img src="screenshots/preview.png" alt="App Preview" width="400">
+  <img src="https://firebasestorage.googleapis.com/v0/b/poster-1c733.appspot.com/o/appIcon%2Fplaystore.png?alt=media&token=1b9684e2-2c7f-4037-962a-4abfc96d96bf" alt="Poster Pal Logo" width="400">
 </div>
 
-![Poster Pal Logo](file:///C:/Users/DELL/Downloads/icons%20and%20fonts/DALL%C2%B7E%202023-08-11%2019.28.13%20-%20a%20modern%20pastel%20style%20app%20icon%20for%20a%20poster%20maker%20icon%20with%20no%20text.png)
 
 Poster Pal is a user-friendly and versatile poster maker app that empowers you to create stunning posters effortlessly. Whether you're designing for personal or professional use, Poster Pal provides a seamless and intuitive interface to bring your creative visions to life.
 
@@ -46,9 +45,9 @@ Poster Pal is a user-friendly and versatile poster maker app that empowers you t
 
 ## Screenshots
 
-![App Screenshot 1]
-![App Screenshot 2]
-![App Screenshot 3]
+![https://firebasestorage.googleapis.com/v0/b/poster-1c733.appspot.com/o/images%2F1692125597091.png?alt=media&token=0585165d-4908-4b0a-82d6-5b2025c96005]
+![https://firebasestorage.googleapis.com/v0/b/poster-1c733.appspot.com/o/images%2F1691926763282.png?alt=media&token=6ae40a66-96f1-4775-81af-d393e2724507]
+![https://firebasestorage.googleapis.com/v0/b/poster-1c733.appspot.com/o/images%2F1691857878558.png?alt=media&token=b375c5d2-ab21-41ca-b235-4e085858cf37]
 
 ## Feedback and Support
 
