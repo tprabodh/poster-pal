@@ -47,12 +47,9 @@ Poster Pal is a user-friendly and versatile poster maker app that empowers you t
 
 <div align="center">
   <!-- Add your app's screenshots here -->
-  <img src="https://firebasestorage.googleapis.com/v0/b/poster-1c733.appspot.com/o/images%2F1692125597091.png?alt=media&token=0585165d-4908-4b0a-82d6-5b2025c96005
-" alt="Screenshot 1" width="200">
-  <img src="https://firebasestorage.googleapis.com/v0/b/poster-1c733.appspot.com/o/images%2F1691926763282.png?alt=media&token=6ae40a66-96f1-4775-81af-d393e2724507
-" alt="Screenshot 2" width="200">
-  <img src="https://firebasestorage.googleapis.com/v0/b/poster-1c733.appspot.com/o/images%2F1691857878558.png?alt=media&token=b375c5d2-ab21-41ca-b235-4e085858cf37
-" alt="Screenshot 3" width="200">
+  <img src="https://firebasestorage.googleapis.com/v0/b/poster-1c733.appspot.com/o/images%2F1692125597091.png?alt=media&token=0585165d-4908-4b0a-82d6-5b2025c96005" alt="Screenshot 1" width="200">
+  <img src="https://firebasestorage.googleapis.com/v0/b/poster-1c733.appspot.com/o/images%2F1691926763282.png?alt=media&token=6ae40a66-96f1-4775-81af-d393e2724507" alt="Screenshot 2" width="200">
+  <img src="https://firebasestorage.googleapis.com/v0/b/poster-1c733.appspot.com/o/images%2F1691857878558.png?alt=media&token=b375c5d2-ab21-41ca-b235-4e085858cf37" alt="Screenshot 3" width="200">
 </div>
 
 
