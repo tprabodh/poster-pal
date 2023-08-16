@@ -599,7 +599,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                     ),
                   ),
                 ],
-              ), //name
+              ), //number
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
