@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:text1/constants/constants.dart';
+import 'package:text1/constants/loading.dart';
 import 'package:text1/constants/routes.dart';
 
 
@@ -17,7 +18,6 @@ class PhoneSignIn extends StatefulWidget {
 class _PhoneSignInState extends State<PhoneSignIn> {
   String? phone;
   final _formKey = GlobalKey<FormState>();
-  String error = '';
   String countryCode='+91';
 
 
@@ -67,6 +67,7 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                     ),
                     SizedBox(
                       width: 40,
+                      //gathering the user's country code
                       child: TextField(
                         onChanged: (value) {
                           setState(() {
@@ -88,7 +89,8 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                       width: 10,
                     ),
                     Expanded(
-                        child: TextFormField(
+                      //gathering the user's phone number
+                    child: TextFormField(
                           decoration: textInputDecoration.copyWith(hintText: 'Enter your Mobile Number'),
                           validator: (val) => val!.isEmpty ? 'Enter a phone number' : null,
                           keyboardType: TextInputType.phone,
@@ -111,28 +113,31 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                           color: Colors.black, width: 1.0), // Small black border
                     ),
                   ),
-                  onPressed: () async{
-                    if(_formKey.currentState!.validate()){
-                    await FirebaseAuth.instance.verifyPhoneNumber(
-                      phoneNumber:countryCode+phone!,
-                      verificationCompleted: (PhoneAuthCredential credential) {},
-                      verificationFailed: (FirebaseAuthException e) {},
-                      codeSent: (String verificationId, int? resendToken) {
-                        Navigator.pushNamed(context,MyRoute.otpRoute );
-                        PhoneSignIn.verify=verificationId;
-                      },
-                      codeAutoRetrievalTimeout: (String verificationId) {
-                      },
-                    );
-                    }
-                    else {
-                      (){
-                      setState(() {
-                        error="enter a valid phone number";
-                      });
-                    };
+                  //sending a otp code to the entered user's phone number
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const Loading()));
+
+                      try {
+                        await FirebaseAuth.instance.verifyPhoneNumber(
+                          phoneNumber: countryCode + phone!,
+                          verificationCompleted: (PhoneAuthCredential credential) {},
+                          verificationFailed: (FirebaseAuthException e) {},
+                          codeSent: (String verificationId, int? resendToken) async {
+                            Navigator.pushReplacementNamed(context, MyRoute.otpRoute);
+                            PhoneSignIn.verify = verificationId;
+                          },
+                          codeAutoRetrievalTimeout: (String verificationId) {},
+                        );
+                      } catch (e) {
+                        //
+                      }
+                    } else {
+
                     }
                   },
+
+
                   child: const Text(
                     'Get otp',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

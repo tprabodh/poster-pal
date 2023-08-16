@@ -18,6 +18,7 @@ import 'package:text1/services/auth.dart';
 import 'package:text1/services/database.dart';
 import 'package:http/http.dart' as http;
 
+//enum for fields used for updating text onto text fields
 enum SelectedTextField {
   none,
   shopName,
@@ -36,6 +37,7 @@ class TextInputScreen extends StatefulWidget {
 }
 
 class TextInputScreenState extends State<TextInputScreen> {
+  //variables for storing field values
   String inputText = '';
   String inputAddress = '';
   String inputMobile = '';
@@ -44,15 +46,18 @@ class TextInputScreenState extends State<TextInputScreen> {
   String submitAddress = '';
   String submitMobile = '';
   String submitName = '';
+  //default font sizes
   double _fontSize = 38.0;
   double _fontAdd = 12.0;
   double _fontName = 26.0;
   double _fontPhone = 26.0;
+  //text edit controllers for updating text onto text fields
   late TextEditingController _shopEditingController;
   late TextEditingController _addEditingController;
   late TextEditingController _nameEditingController;
   late TextEditingController _mobileEditingController;
 
+  // initializing values for text edit controllers
   @override
   void initState() {
     super.initState();
@@ -62,6 +67,7 @@ class TextInputScreenState extends State<TextInputScreen> {
     _mobileEditingController = TextEditingController(text: inputMobile);
 
   }
+  //disposing text edit controllers
   @override
   void dispose() {
     _shopEditingController.dispose();
@@ -71,12 +77,12 @@ class TextInputScreenState extends State<TextInputScreen> {
 
     super.dispose();
   }
-
   String? vendorCodeFontFamily;
   String? addressFontFamily;
   String? vendorNameFontFamily;
   String? shopNameFontFamily;
 
+  //fonts list used
   List<String> fontFamilies = [
     'Roboto',
     'Poppins',
@@ -88,6 +94,7 @@ class TextInputScreenState extends State<TextInputScreen> {
   ];
   String? selectedFontFamily;
 
+  //colors list user
   List <Color> colorOptions=[
   Colors.black,
   Colors.white,
@@ -99,6 +106,7 @@ class TextInputScreenState extends State<TextInputScreen> {
   Colors.orange,
   ];
 
+  //default positions
   double shopl = 60.0;
   double shopt = 70.0;
   double addPositionl=10.0;
@@ -112,6 +120,7 @@ class TextInputScreenState extends State<TextInputScreen> {
 
   String? selectedOption;
 
+  //default color
   Color?  selectedColorAdd= Colors.black;
   Color?  selectedColorShop= Colors.black;
   Color?  selectedColorName= Colors.black;
@@ -122,7 +131,8 @@ class TextInputScreenState extends State<TextInputScreen> {
 
   final ImagePicker _picker = ImagePicker();
 
-  List<File> _selectedImages = [];
+  final List<File> _selectedImages = [];
+  //function to add a small logo
   Future _addSmallLogo() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -153,7 +163,7 @@ class TextInputScreenState extends State<TextInputScreen> {
   return imageUrls;
   }
 
-
+//function to show the template options available
   Future<void> _showImageOptionsDialog() async {
     List<String> modelImages = await fetchModelImages();
 
@@ -641,6 +651,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text("Select Font Family:",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,fontFamily: selectedFontFamily),),
+                        //font selection button
                         DropdownButton<String>(
                           value: selectedFontFamily,
                           hint: const Text('Select a Font'),
@@ -670,6 +681,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        //Button to select the template design
                         ElevatedButton(
                           onPressed:(){
                             _showImageOptionsDialog();
@@ -686,6 +698,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                             ),
                   child: const Text('Upload Design'),
                         ),
+                        //Button to fetch text from the details collection
                         ElevatedButton(
                           onPressed: () async {
                             try {
@@ -736,6 +749,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                           ),
                           child: const Text('Get Text'),
                         ),
+                        //Button to add a small logo onto the stack
                         ElevatedButton(
                           onPressed: _addSmallLogo,
                           style: ElevatedButton.styleFrom(
@@ -750,6 +764,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                           ), // Call _addSmallLogo method
                           child: const Text('Add PIC'),
                         ),
+                        //Button to save the stack as a image onto the gallery as well as onto the cloud storage
                         ElevatedButton(
                           onPressed: () {
                             Future<void> saveStack() async {
@@ -776,8 +791,6 @@ class TextInputScreenState extends State<TextInputScreen> {
                                      DatabaseService(uid: user.uid).updateConsumerDataWithImage(imageUrl);
                                    });
                                    }
-
-
                                   // Save the image to the gallery
                                   await ImageGallerySaver.saveImage(bytes);
 
@@ -822,6 +835,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        //Button to submit the fetched or entered text onto the stack
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
@@ -845,6 +859,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                           child: const Text('SUBMIT TEXT'),
                         ),
                         const SizedBox(width: 15),
+                        //Button to fetch and display the previously created posters by the user
                         ElevatedButton(
                             onPressed: (){
                                       Future<void> loadSavedImages() async {
@@ -864,18 +879,19 @@ class TextInputScreenState extends State<TextInputScreen> {
                             ),
                           ),
                           child: const Text('VIEW SAVED')),
-
                       ],
                     )
                   ],
                 ),
               ),
+              //The space where the previously created posters by the user are displayed
               Column(
                 children: savedImageUrls.map((imageUrl) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Card(
                       child: InkWell(
+                        //a expanded view of the poster
                         onTap: () {
                           Navigator.push(
                             context,
@@ -893,6 +909,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                               fit: BoxFit.cover,
                             ),
                             const SizedBox(height: 8.0),
+                            //Button to download the poster from the cloud storage
                             ElevatedButton(
                               onPressed: () async {
                                 try {

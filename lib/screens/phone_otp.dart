@@ -41,6 +41,7 @@ class _PhoneOtpState extends State<PhoneOtp> {
             children: [
               const Text('Enter Your OTP',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
               const SizedBox(height: 10,),
+              //gathering the otp from the user
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: 'Enter your otp'),
                 validator: (val) => val!.isEmpty ? 'Enter an otp' : null,
@@ -60,6 +61,7 @@ class _PhoneOtpState extends State<PhoneOtp> {
                           color: Colors.black, width: 1.0), // Small black border
                     ),
                   ),
+                //checking the otp is correct and logging in if it is along with initializing consumerId field
                 onPressed: () async {
                   try {
                     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -78,8 +80,8 @@ class _PhoneOtpState extends State<PhoneOtp> {
                       currentUser = user;
                       subscription?.cancel(); // Cancel the stream subscription
                       if (currentUser != null){
-                        // Create a document in the consumers collection with name and empty imageUrls list
                         String consumerId=currentUser!.uid;
+                        //updating consumerId
                         DatabaseService(uid: currentUser!.uid).updateUserDetails(consumerId);
                         final prefs = await SharedPreferences.getInstance();
                         prefs.setBool('isUserLoggedIn', true);

@@ -16,7 +16,7 @@ void main() async {
   // Initialize Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+//using SharedPreferences so that user is logged i until he explicitly logs out
   final prefs = await SharedPreferences.getInstance();
   final isUserLoggedIn = prefs.getBool('isUserLoggedIn') ?? false;
 
