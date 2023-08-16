@@ -11,9 +11,9 @@ import 'dart:ui' as ui;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:text1/constants/routes.dart';
 import 'package:text1/models/consumer.dart';
 import 'package:text1/screens/expanded_image_view.dart';
-import 'package:text1/screens/phone_sign_in.dart';
 import 'package:text1/services/auth.dart';
 import 'package:text1/services/database.dart';
 import 'package:http/http.dart' as http;
@@ -224,12 +224,7 @@ class TextInputScreenState extends State<TextInputScreen> {
               final prefs = await SharedPreferences.getInstance();
               prefs.setBool('isUserLoggedIn', false);
               await _auth.signOut();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const PhoneSignIn(),
-                ),
-              );
+              Navigator.pushNamed(context, MyRoute.loginRoute);
             },
           ),
 

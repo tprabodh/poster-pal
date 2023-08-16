@@ -3,11 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:text1/constants/constants.dart';
+import 'package:text1/constants/routes.dart';
 import 'package:text1/models/consumer.dart';
 import 'package:text1/screens/phone_sign_in.dart';
 import 'package:text1/services/auth.dart';
 import 'package:text1/services/database.dart';
-import 'package:text1/screens/text_Input_screen.dart';
 
 class PhoneOtp extends StatefulWidget {
   const PhoneOtp({Key? key}) : super(key: key);
@@ -84,12 +84,7 @@ class _PhoneOtpState extends State<PhoneOtp> {
                         final prefs = await SharedPreferences.getInstance();
                         prefs.setBool('isUserLoggedIn', true);
                         // Navigate to the TextInputScreen
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const TextInputScreen(),
-                          ),
-                        );
+                        Navigator.pushNamed(context, MyRoute.homeRoute);
                       }
                     });
 

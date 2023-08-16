@@ -1,8 +1,7 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:text1/constants/constants.dart';
-import 'package:text1/screens/phone_otp.dart';
+import 'package:text1/constants/routes.dart';
 
 
 
@@ -119,12 +118,7 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                       verificationCompleted: (PhoneAuthCredential credential) {},
                       verificationFailed: (FirebaseAuthException e) {},
                       codeSent: (String verificationId, int? resendToken) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PhoneOtp(),
-                          ),
-                        );
+                        Navigator.pushNamed(context,MyRoute.otpRoute );
                         PhoneSignIn.verify=verificationId;
                       },
                       codeAutoRetrievalTimeout: (String verificationId) {
