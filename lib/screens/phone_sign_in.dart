@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:text1/constants/constants.dart';
 import 'package:text1/constants/loading.dart';
 import 'package:text1/constants/routes.dart';
-
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 
 class PhoneSignIn extends StatefulWidget {
@@ -31,7 +31,7 @@ void initState(){
 
   controller=AnimationController(
       vsync: this,
-  duration:Duration(seconds: 1) );
+  duration:const Duration(seconds: 1) );
 
   animation=CurvedAnimation(
       parent: controller,
@@ -72,18 +72,22 @@ void initState(){
                 children: [
                   Hero(
                     tag: "icon tag",
-                    child: Container(
-                      height:controller.value*60,
+                    child: SizedBox(
+                      height:60,
                       child: Image.asset("assets/icon.png"),
                     ),
                   ),
-                  SizedBox(width: 20.0,),
-                  Text(
-                    "Phone Verification",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
+                  const SizedBox(width: 20.0,),
+                  AnimatedTextKit(
+                    animatedTexts:[
+                    TypewriterAnimatedText("Poster Pal",
+                        textStyle:const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold),
+                    ),]
+                  )
                 ],
-              ),
+          ),
               const SizedBox(
                 height: 10,
               ),

@@ -23,6 +23,7 @@ dependencies:
   firebase_storage: ^11.2.5
   http: ^1.1.0
   shared_preferences: ^2.2.0
+  animated_text_kit: ^4.2.2
 
 
 dev_dependencies:
