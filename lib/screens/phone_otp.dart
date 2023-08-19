@@ -26,7 +26,7 @@ class _PhoneOtpState extends State<PhoneOtp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.brown[50],
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
         title: const Text('Enter Your OTP'),
@@ -39,7 +39,16 @@ class _PhoneOtpState extends State<PhoneOtp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Enter Your OTP',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
+              Hero(
+                tag: "icon tag",
+                child: Container(
+                  width: 160.0,
+                  height:160.0,
+                  child: Image.asset("assets/icon.png"),
+                ),
+              ),
+               SizedBox(height: 26.0,),
+               Text('Enter Your OTP',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
               const SizedBox(height: 10,),
               //gathering the otp from the user
               TextFormField(
@@ -50,10 +59,11 @@ class _PhoneOtpState extends State<PhoneOtp> {
                   setState(() => otp = val);
                 },
               ),
+              SizedBox(height: 10.0,),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
-                    backgroundColor: Colors.cyan[400], // Text color
+                    backgroundColor: Colors.brown[400], // Text color
                     elevation: 4, // Elevation
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6), // Rounded edges

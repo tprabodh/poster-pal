@@ -15,16 +15,46 @@ class PhoneSignIn extends StatefulWidget {
   State<PhoneSignIn> createState() => _PhoneSignInState();
 }
 
-class _PhoneSignInState extends State<PhoneSignIn> {
+class _PhoneSignInState extends State<PhoneSignIn> with SingleTickerProviderStateMixin{
   String? phone;
   final _formKey = GlobalKey<FormState>();
   String countryCode='+91';
 
+late AnimationController controller;
+late Animation animation;
+late Animation animationTween;
+
+
+@override
+void initState(){
+  super.initState();
+
+  controller=AnimationController(
+      vsync: this,
+  duration:Duration(seconds: 1) );
+
+  animation=CurvedAnimation(
+      parent: controller,
+      curve: Curves.easeIn,
+  );
+  animationTween=ColorTween(begin: Colors.brown[300] ,end: Colors.white).animate(controller);
+
+  controller.forward();
+  controller.addListener(() {
+    setState(() {
+    });
+  });
+}
+  @override
+  void dispose(){
+  controller.dispose();
+  super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      backgroundColor: Colors.brown[50],
+      backgroundColor: animationTween.value,
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
         title: const Text('Enter Your Mobile Number'),
@@ -37,9 +67,22 @@ class _PhoneSignInState extends State<PhoneSignIn> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                "Phone Verification",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Hero(
+                    tag: "icon tag",
+                    child: Container(
+                      height:controller.value*60,
+                      child: Image.asset("assets/icon.png"),
+                    ),
+                  ),
+                  SizedBox(width: 20.0,),
+                  Text(
+                    "Phone Verification",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 10,
@@ -105,7 +148,7 @@ class _PhoneSignInState extends State<PhoneSignIn> {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
-                    backgroundColor: Colors.cyan[400], // Text color
+                    backgroundColor: Colors.brown[400], // Text color
                     elevation: 4, // Elevation
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6), // Rounded edges

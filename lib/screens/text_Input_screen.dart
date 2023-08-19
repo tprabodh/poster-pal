@@ -217,7 +217,24 @@ class TextInputScreenState extends State<TextInputScreen> {
     return Scaffold(
       backgroundColor: Colors.lightBlue[50],
       appBar: AppBar(
-        title: const Text('Poster Pal'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Hero(
+              tag: "icon tag",
+              child: Container(
+                padding: EdgeInsets.all(0.0),
+                height:22.0,
+                child: Image.asset("assets/icon.png"),
+              ),
+            ),
+            SizedBox(width: 3.0,),
+            Text(
+              "Poster Pal",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
         backgroundColor: Colors.blue[400],
         elevation: 0.0,
         actions: <Widget>[
@@ -237,8 +254,19 @@ class TextInputScreenState extends State<TextInputScreen> {
               Navigator.pushNamed(context, MyRoute.loginRoute);
             },
           ),
-
         ],
+      ),
+      drawer: Drawer(
+        backgroundColor:  Colors.lightBlue[50],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 30.0,),
+            TextButton(onPressed: () {  },
+              child: Text("Developer Details",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20.0),),
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -696,7 +724,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                                   color: Colors.black, width: 1.0), // Small black border
                                ),
                             ),
-                  child: const Text('Upload Design'),
+                  child: const Text('Import Design'),
                         ),
                         //Button to fetch text from the details collection
                         ElevatedButton(
