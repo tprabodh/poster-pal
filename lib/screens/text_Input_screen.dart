@@ -132,6 +132,7 @@ class TextInputScreenState extends State<TextInputScreen> {
   final ImagePicker _picker = ImagePicker();
 
   final List<File> _selectedImages = [];
+
   //function to add a small logo
   Future _addSmallLogo() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -141,6 +142,7 @@ class TextInputScreenState extends State<TextInputScreen> {
       });
     }
   }
+
   List<String> savedImageUrls = []; // List to store saved image URLs
 
 
@@ -222,16 +224,17 @@ class TextInputScreenState extends State<TextInputScreen> {
           children: [
             Hero(
               tag: "icon tag",
-              child: Container(
-                padding: EdgeInsets.all(0.0),
+              child: SizedBox(
                 height:22.0,
                 child: Image.asset("assets/icon.png"),
               ),
             ),
-            SizedBox(width: 3.0,),
-            Text(
+            const SizedBox(width: 3.0,),
+            const Text(
               "Poster Pal",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 22,
+                  fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -261,9 +264,14 @@ class TextInputScreenState extends State<TextInputScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 30.0,),
+            const SizedBox(height: 30.0,),
             TextButton(onPressed: () {  },
-              child: Text("Developer Details",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20.0),),
+              child: const Text("Developer Details",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                )
+              ),
             ),
           ],
         ),
@@ -576,7 +584,6 @@ class TextInputScreenState extends State<TextInputScreen> {
                       });
                     },
                   ),
-
                   DropdownButton<Color>(
                     value: selectedColorName,
                     onChanged: (Color? newValue) {
@@ -642,7 +649,6 @@ class TextInputScreenState extends State<TextInputScreen> {
                       });
                     },
                   ),
-
                   DropdownButton<Color>(
                     value: selectedColorPhone,
                     onChanged: (Color? newValue) {

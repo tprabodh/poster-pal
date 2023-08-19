@@ -180,11 +180,8 @@ void initState(){
                         //
                       }
                     } else {
-
                     }
                   },
-
-
                   child: const Text(
                     'Get otp',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

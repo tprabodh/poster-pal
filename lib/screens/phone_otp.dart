@@ -41,14 +41,21 @@ class _PhoneOtpState extends State<PhoneOtp> {
             children: [
               Hero(
                 tag: "icon tag",
-                child: Container(
+                child: SizedBox(
                   width: 160.0,
                   height:160.0,
                   child: Image.asset("assets/icon.png"),
                 ),
               ),
-               SizedBox(height: 26.0,),
-               Text('Enter Your OTP',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
+               const SizedBox(height: 26.0,),
+               const Text(
+                 'Enter Your OTP',
+                 style: TextStyle(
+                     fontSize: 16,
+                     fontWeight: FontWeight.bold,
+                     color: Colors.black,
+                 )
+               ),
               const SizedBox(height: 10,),
               //gathering the otp from the user
               TextFormField(
@@ -59,7 +66,7 @@ class _PhoneOtpState extends State<PhoneOtp> {
                   setState(() => otp = val);
                 },
               ),
-              SizedBox(height: 10.0,),
+              const SizedBox(height: 10.0,),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
