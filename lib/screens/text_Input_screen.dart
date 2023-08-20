@@ -11,13 +11,14 @@ import 'dart:ui' as ui;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:text1/constants/routes.dart';
 import 'package:text1/models/consumer.dart';
 import 'package:text1/screens/expanded_image_view.dart';
-import 'package:text1/screens/phone_sign_in.dart';
 import 'package:text1/services/auth.dart';
 import 'package:text1/services/database.dart';
 import 'package:http/http.dart' as http;
 
+//enum for fields used for updating text onto text fields
 enum SelectedTextField {
   none,
   shopName,
@@ -36,6 +37,7 @@ class TextInputScreen extends StatefulWidget {
 }
 
 class TextInputScreenState extends State<TextInputScreen> {
+  //variables for storing field values
   String inputText = '';
   String inputAddress = '';
   String inputMobile = '';
@@ -44,15 +46,18 @@ class TextInputScreenState extends State<TextInputScreen> {
   String submitAddress = '';
   String submitMobile = '';
   String submitName = '';
+  //default font sizes
   double _fontSize = 38.0;
   double _fontAdd = 12.0;
   double _fontName = 26.0;
   double _fontPhone = 26.0;
+  //text edit controllers for updating text onto text fields
   late TextEditingController _shopEditingController;
   late TextEditingController _addEditingController;
   late TextEditingController _nameEditingController;
   late TextEditingController _mobileEditingController;
 
+  // initializing values for text edit controllers
   @override
   void initState() {
     super.initState();
@@ -62,6 +67,7 @@ class TextInputScreenState extends State<TextInputScreen> {
     _mobileEditingController = TextEditingController(text: inputMobile);
 
   }
+  //disposing text edit controllers
   @override
   void dispose() {
     _shopEditingController.dispose();
@@ -71,12 +77,12 @@ class TextInputScreenState extends State<TextInputScreen> {
 
     super.dispose();
   }
-
   String? vendorCodeFontFamily;
   String? addressFontFamily;
   String? vendorNameFontFamily;
   String? shopNameFontFamily;
 
+  //fonts list used
   List<String> fontFamilies = [
     'Roboto',
     'Poppins',
@@ -88,6 +94,7 @@ class TextInputScreenState extends State<TextInputScreen> {
   ];
   String? selectedFontFamily;
 
+  //colors list user
   List <Color> colorOptions=[
   Colors.black,
   Colors.white,
@@ -99,6 +106,7 @@ class TextInputScreenState extends State<TextInputScreen> {
   Colors.orange,
   ];
 
+  //default positions
   double shopl = 60.0;
   double shopt = 70.0;
   double addPositionl=10.0;
@@ -112,17 +120,21 @@ class TextInputScreenState extends State<TextInputScreen> {
 
   String? selectedOption;
 
+  //default color
   Color?  selectedColorAdd= Colors.black;
   Color?  selectedColorShop= Colors.black;
   Color?  selectedColorName= Colors.black;
   Color?  selectedColorPhone= Colors.black;
 
   final GlobalKey stackKey = GlobalKey();
+
   String? _selectedImage;
 
   final ImagePicker _picker = ImagePicker();
 
-  List<File> _selectedImages = [];
+  final List<File> _selectedImages = [];
+
+  //function to add a small logo
   Future _addSmallLogo() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -131,73 +143,59 @@ class TextInputScreenState extends State<TextInputScreen> {
       });
     }
   }
+
   List<String> savedImageUrls = []; // List to store saved image URLs
 
 
-  // Function to fetch image URLs from Firebase Storage "models" folder
-  Future<List<String>> fetchModelImages() async {
-  List<String> imageUrls = [];
-
-  try {
-  firebase_storage.ListResult result =
-  await firebase_storage.FirebaseStorage.instance.ref('models/').listAll();
-
-  for (firebase_storage.Reference ref in result.items) {
-  String url = await ref.getDownloadURL();
-  imageUrls.add(url);
-  }
-  } catch (e) {
-  print('Error fetching model images: $e');
-  }
-
-  return imageUrls;
-  }
-
-
+  // Function to fetch image URLs from Firebase Storage "models" folder and display designs fetched
   Future<void> _showImageOptionsDialog() async {
-    List<String> modelImages = await fetchModelImages();
+    List<String> modelImages = [];
+    try {
+      firebase_storage.ListResult result = await firebase_storage.FirebaseStorage.instance.ref('models/').listAll();
+      for (firebase_storage.Reference ref in result.items) {
+        String url = await ref.getDownloadURL();
+        modelImages.add(url);
+      }
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Select Model Image'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: modelImages.asMap().entries.map((entry) {
-                int index = entry.key;
-                String imageUrl = entry.value;
-                return Card(
-                  elevation: 4,
-                  margin: EdgeInsets.symmetric(vertical: 8),
-                  child: ListTile(
-                    leading: Image.network(
-                      imageUrl,
-                      width: 80,
-                      height: 80,
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Select Model Image'),
+            content: Container(
+              width: double.maxFinite,
+              child: ListView.builder(
+                itemCount: modelImages.length,
+                itemBuilder: (context, index) {
+                  String imageUrl = modelImages[index];
+                  return Card(
+                    elevation: 4,
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: ListTile(
+                      leading: Image.network(
+                        imageUrl,
+                        width: 80,
+                        height: 80,
+                      ),
+                      title: Text('Model Image $index'),
+                      onTap: () {
+                        Navigator.of(context).pop(); // Close the dialog
+                        setState(() {
+                          _selectedImage = imageUrl;
+                        });
+                      },
                     ),
-                    title: Text('Model Image ${index + 1}'), // Dynamic title
-                    onTap: () {
-                      // Download the selected image and assign it to _selectedImage
-                      // _downloadAndSetSelectedImage(imageUrl);
-                      Navigator.of(context).pop(); // Close the dialog
-                      setState((){
-                        _selectedImage=imageUrl;
-                      });
-
-                    },
-                  ),
-                );
-              }).toList(),
+                  );
+                },
+              ),
             ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    } catch (e) {
+      print('Error fetching and showing model images: $e');
+    }
   }
-
-
-
 
 
   @override
@@ -207,7 +205,25 @@ class TextInputScreenState extends State<TextInputScreen> {
     return Scaffold(
       backgroundColor: Colors.lightBlue[50],
       appBar: AppBar(
-        title: const Text('Poster Pal'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Hero(
+              tag: "icon tag",
+              child: SizedBox(
+                height:22.0,
+                child: Image.asset("assets/icon.png"),
+              ),
+            ),
+            const SizedBox(width: 3.0,),
+            const Text(
+              "Poster Pal",
+              style: TextStyle(fontSize: 22,
+                  fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
         backgroundColor: Colors.blue[400],
         elevation: 0.0,
         actions: <Widget>[
@@ -224,16 +240,28 @@ class TextInputScreenState extends State<TextInputScreen> {
               final prefs = await SharedPreferences.getInstance();
               prefs.setBool('isUserLoggedIn', false);
               await _auth.signOut();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const PhoneSignIn(),
-                ),
-              );
+              Navigator.pushNamed(context, MyRoute.loginRoute);
             },
           ),
-
         ],
+      ),
+      drawer: Drawer(
+        backgroundColor:  Colors.lightBlue[50],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(height: 30.0,),
+
+            TextButton(onPressed: () {  },
+              child: const Text("Developer Details",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                )
+              ),
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -543,7 +571,6 @@ class TextInputScreenState extends State<TextInputScreen> {
                       });
                     },
                   ),
-
                   DropdownButton<Color>(
                     value: selectedColorName,
                     onChanged: (Color? newValue) {
@@ -594,7 +621,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                     ),
                   ),
                 ],
-              ), //name
+              ), //number
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -609,7 +636,6 @@ class TextInputScreenState extends State<TextInputScreen> {
                       });
                     },
                   ),
-
                   DropdownButton<Color>(
                     value: selectedColorPhone,
                     onChanged: (Color? newValue) {
@@ -646,6 +672,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text("Select Font Family:",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,fontFamily: selectedFontFamily),),
+                        //font selection button
                         DropdownButton<String>(
                           value: selectedFontFamily,
                           hint: const Text('Select a Font'),
@@ -675,6 +702,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        //Button to select the template design
                         ElevatedButton(
                           onPressed:(){
                             _showImageOptionsDialog();
@@ -689,8 +717,9 @@ class TextInputScreenState extends State<TextInputScreen> {
                                   color: Colors.black, width: 1.0), // Small black border
                                ),
                             ),
-                  child: const Text('Upload Design'),
+                  child: const Text('Import Design'),
                         ),
+                        //Button to fetch text from the details collection
                         ElevatedButton(
                           onPressed: () async {
                             try {
@@ -741,6 +770,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                           ),
                           child: const Text('Get Text'),
                         ),
+                        //Button to add a small logo onto the stack
                         ElevatedButton(
                           onPressed: _addSmallLogo,
                           style: ElevatedButton.styleFrom(
@@ -755,6 +785,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                           ), // Call _addSmallLogo method
                           child: const Text('Add PIC'),
                         ),
+                        //Button to save the stack as a image onto the gallery as well as onto the cloud storage
                         ElevatedButton(
                           onPressed: () {
                             Future<void> saveStack() async {
@@ -781,8 +812,6 @@ class TextInputScreenState extends State<TextInputScreen> {
                                      DatabaseService(uid: user.uid).updateConsumerDataWithImage(imageUrl);
                                    });
                                    }
-
-
                                   // Save the image to the gallery
                                   await ImageGallerySaver.saveImage(bytes);
 
@@ -827,6 +856,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        //Button to submit the fetched or entered text onto the stack
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
@@ -850,6 +880,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                           child: const Text('SUBMIT TEXT'),
                         ),
                         const SizedBox(width: 15),
+                        //Button to fetch and display the previously created posters by the user
                         ElevatedButton(
                             onPressed: (){
                                       Future<void> loadSavedImages() async {
@@ -869,18 +900,20 @@ class TextInputScreenState extends State<TextInputScreen> {
                             ),
                           ),
                           child: const Text('VIEW SAVED')),
-
                       ],
                     )
                   ],
                 ),
               ),
+
+              //The space where the previously created posters by the user are displayed
               Column(
                 children: savedImageUrls.map((imageUrl) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Card(
                       child: InkWell(
+                        //a expanded view of the poster
                         onTap: () {
                           Navigator.push(
                             context,
@@ -898,6 +931,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                               fit: BoxFit.cover,
                             ),
                             const SizedBox(height: 8.0),
+                            //Button to download the poster from the cloud storage
                             ElevatedButton(
                               onPressed: () async {
                                 try {

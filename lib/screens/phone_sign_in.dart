@@ -1,9 +1,9 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:text1/constants/constants.dart';
-import 'package:text1/screens/phone_otp.dart';
-
+import 'package:text1/constants/loading.dart';
+import 'package:text1/constants/routes.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 
 class PhoneSignIn extends StatefulWidget {
@@ -15,17 +15,46 @@ class PhoneSignIn extends StatefulWidget {
   State<PhoneSignIn> createState() => _PhoneSignInState();
 }
 
-class _PhoneSignInState extends State<PhoneSignIn> {
+class _PhoneSignInState extends State<PhoneSignIn> with SingleTickerProviderStateMixin{
   String? phone;
   final _formKey = GlobalKey<FormState>();
-  String error = '';
   String countryCode='+91';
 
+late AnimationController controller;
+late Animation animation;
+late Animation animationTween;
+
+
+@override
+void initState(){
+  super.initState();
+
+  controller=AnimationController(
+      vsync: this,
+  duration:const Duration(seconds: 1) );
+
+  animation=CurvedAnimation(
+      parent: controller,
+      curve: Curves.easeIn,
+  );
+  animationTween=ColorTween(begin: Colors.brown[300] ,end: Colors.white).animate(controller);
+
+  controller.forward();
+  controller.addListener(() {
+    setState(() {
+    });
+  });
+}
+  @override
+  void dispose(){
+  controller.dispose();
+  super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      backgroundColor: Colors.brown[50],
+      backgroundColor: animationTween.value,
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
         title: const Text('Enter Your Mobile Number'),
@@ -38,10 +67,27 @@ class _PhoneSignInState extends State<PhoneSignIn> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                "Phone Verification",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Hero(
+                    tag: "icon tag",
+                    child: SizedBox(
+                      height:60,
+                      child: Image.asset("assets/icon.png"),
+                    ),
+                  ),
+                  const SizedBox(width: 20.0,),
+                  AnimatedTextKit(
+                    animatedTexts:[
+                    TypewriterAnimatedText("Poster Pal",
+                        textStyle:const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold),
+                    ),]
+                  )
+                ],
+          ),
               const SizedBox(
                 height: 10,
               ),
@@ -68,6 +114,7 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                     ),
                     SizedBox(
                       width: 40,
+                      //gathering the user's country code
                       child: TextField(
                         onChanged: (value) {
                           setState(() {
@@ -89,7 +136,8 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                       width: 10,
                     ),
                     Expanded(
-                        child: TextFormField(
+                      //gathering the user's phone number
+                    child: TextFormField(
                           decoration: textInputDecoration.copyWith(hintText: 'Enter your Mobile Number'),
                           validator: (val) => val!.isEmpty ? 'Enter a phone number' : null,
                           keyboardType: TextInputType.phone,
@@ -104,7 +152,7 @@ class _PhoneSignInState extends State<PhoneSignIn> {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
-                    backgroundColor: Colors.cyan[400], // Text color
+                    backgroundColor: Colors.brown[400], // Text color
                     elevation: 4, // Elevation
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6), // Rounded edges
@@ -112,31 +160,26 @@ class _PhoneSignInState extends State<PhoneSignIn> {
                           color: Colors.black, width: 1.0), // Small black border
                     ),
                   ),
-                  onPressed: () async{
-                    if(_formKey.currentState!.validate()){
-                    await FirebaseAuth.instance.verifyPhoneNumber(
-                      phoneNumber:countryCode+phone!,
-                      verificationCompleted: (PhoneAuthCredential credential) {},
-                      verificationFailed: (FirebaseAuthException e) {},
-                      codeSent: (String verificationId, int? resendToken) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PhoneOtp(),
-                          ),
+                  //sending a otp code to the entered user's phone number
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const Loading()));
+
+                      try {
+                        await FirebaseAuth.instance.verifyPhoneNumber(
+                          phoneNumber: countryCode + phone!,
+                          verificationCompleted: (PhoneAuthCredential credential) {},
+                          verificationFailed: (FirebaseAuthException e) {},
+                          codeSent: (String verificationId, int? resendToken) async {
+                            Navigator.pushReplacementNamed(context, MyRoute.otpRoute);
+                            PhoneSignIn.verify = verificationId;
+                          },
+                          codeAutoRetrievalTimeout: (String verificationId) {},
                         );
-                        PhoneSignIn.verify=verificationId;
-                      },
-                      codeAutoRetrievalTimeout: (String verificationId) {
-                      },
-                    );
-                    }
-                    else {
-                      (){
-                      setState(() {
-                        error="enter a valid phone number";
-                      });
-                    };
+                      } catch (e) {
+                        //
+                      }
+                    } else {
                     }
                   },
                   child: const Text(

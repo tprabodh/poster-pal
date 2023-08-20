@@ -9,14 +9,16 @@ class DatabaseService {
   final CollectionReference consumerCollection = FirebaseFirestore.instance.collection('consumers');
   final CollectionReference detailsCollection = FirebaseFirestore.instance.collection('details');
 
+  // create a document in the database with the  just empty fields when the user is created
   Future<void> updateConsumerData( String name,List<String> currentImageUrls) async {
     return await consumerCollection.doc(uid).set({
       'name': name,
       'imageUrl': [],
     });
   }
+
+  // create a document in the database with text when the user is created
   Future<void> updateUserDetails(String consumerId) async{
-    final CollectionReference detailsCollection = FirebaseFirestore.instance.collection('details');
     return await detailsCollection.doc(uid).set({
       'shopName':'RIYAZ CHICKEN',
       'vendorName':'Riyaz',
@@ -26,6 +28,7 @@ class DatabaseService {
     });
   }
 
+  // updating the cloud storage with currently saved image
   Future<void> updateConsumerDataWithImage(String imageUrl) async {
     DocumentReference userDocRef = consumerCollection.doc(uid);
 
@@ -41,6 +44,7 @@ class DatabaseService {
     });
   }
 
+  // fetching saved image urls
   Future<List<String>> getUserImageUrls() async {
     DocumentSnapshot snapshot = await consumerCollection.doc(uid).get();
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
