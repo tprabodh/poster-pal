@@ -197,6 +197,31 @@ class TextInputScreenState extends State<TextInputScreen> {
     }
   }
 
+  void _downloadToGallery(BuildContext context, String imageUrl)  async {
+    try {
+      // Download the image data from the URL
+      http.Response response = await http.get(Uri.parse(imageUrl));
+      Uint8List imageData = response.bodyBytes;
+
+      // Save the image data to the gallery
+      bool isSaved = await ImageGallerySaver.saveImage(imageData);
+
+      if (isSaved) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Image saved to gallery')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to save image to gallery')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Image saved to gallery')),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -933,30 +958,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                             const SizedBox(height: 8.0),
                             //Button to download the poster from the cloud storage
                             ElevatedButton(
-                              onPressed: () async {
-                                try {
-                                  // Download the image data from the URL
-                                  http.Response response = await http.get(Uri.parse(imageUrl));
-                                  Uint8List imageData = response.bodyBytes;
-
-                                  // Save the image data to the gallery
-                                  bool isSaved = await ImageGallerySaver.saveImage(imageData);
-
-                                  if (isSaved) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Image saved to gallery')),
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Failed to save image to gallery')),
-                                    );
-                                  }
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Image saved to gallery')),
-                                  );
-                                }
-                              },
+                              onPressed: () => _downloadToGallery(context, imageUrl),
                               style: ElevatedButton.styleFrom(
                                 foregroundColor: Colors.white,
                                 backgroundColor: Colors.cyan[400], // Text color
