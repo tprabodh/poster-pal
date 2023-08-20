@@ -227,6 +227,96 @@ class TextInputScreenState extends State<TextInputScreen> {
   Widget build(BuildContext context) {
     Cansumer? user = Provider.of<Cansumer?>(context);
     final AuthService _auth = AuthService();
+    Future<void> saveStack() async {
+      // Check for permission to access the storage
+      final PermissionStatus permissionStatus =
+      await Permission.storage.request();
+      if (permissionStatus.isGranted) {
+        try {
+          // Capture the stack as an image
+          RenderRepaintBoundary boundary = stackKey.currentContext!
+              .findRenderObject() as RenderRepaintBoundary;
+          ui.Image image = await boundary.toImage();
+          ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+          Uint8List bytes = byteData!.buffer.asUint8List();
+          if(user!= null)
+          {
+            final String imageName = '${DateTime.now().millisecondsSinceEpoch}.png';
+            firebase_storage.Reference storageReference = firebase_storage.FirebaseStorage.instance.ref().child('images/$imageName');
+            firebase_storage.UploadTask uploadTask = storageReference.putData(bytes);
+
+            await uploadTask.whenComplete(() async {
+              String imageUrl = await storageReference.getDownloadURL();
+              DatabaseService(uid: user.uid).updateConsumerDataWithImage(imageUrl);
+            });
+          }
+          // Save the image to the gallery
+          await ImageGallerySaver.saveImage(bytes);
+
+          // Show a success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Image saved to gallery')),
+          );
+        } catch (e) {
+          // Show an error message
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to save Image')),
+          );
+        }
+      } else {
+        if (permissionStatus.isPermanentlyDenied) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Permission permanently denied')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Permission denied')),
+          );
+        }
+      }
+    }
+    Future<void> loadSavedImages() async {
+      List<String> imageUrls = await DatabaseService(uid: user!.uid).getUserImageUrls();
+      setState(() {savedImageUrls = imageUrls;});
+    }
+    Future<void> fetchAndFillUserDetails() async {
+      try {
+        final FirebaseAuth auth = FirebaseAuth.instance;
+        final User? user = auth.currentUser;
+        if (user != null) {
+          String currentUserId = user.uid;
+
+          final CollectionReference detailsCollection =
+          FirebaseFirestore.instance.collection('details');
+
+          DocumentSnapshot detailsDoc =
+          await detailsCollection.doc(currentUserId).get();
+
+          if (detailsDoc.exists) {
+            Map<String, dynamic> detailsData =
+            detailsDoc.data() as Map<String, dynamic>;
+
+            setState(() {
+              inputText = detailsData['shopName'] ?? '';
+              inputAddress = detailsData['address'] ?? '';
+              inputMobile = detailsData['vendorCode'] ?? '';
+              inputName = detailsData['vendorName'] ?? '';
+              _shopEditingController.text = inputText;
+              _addEditingController.text = inputAddress;
+              _nameEditingController.text = inputName;
+              _mobileEditingController.text = inputMobile;
+            });
+          } else {
+            // Document doesn't exist
+            print('Details document not found.');
+          }
+        }
+      } catch (e) {
+        print('Error fetching details: $e');
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.lightBlue[50],
       appBar: AppBar(
@@ -448,8 +538,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                     ),
                   ),
                 ],
-              ),
-              //shopName
+              ),//shopName
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -746,43 +835,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                         ),
                         //Button to fetch text from the details collection
                         ElevatedButton(
-                          onPressed: () async {
-                            try {
-                              final FirebaseAuth auth = FirebaseAuth.instance;
-                              final User? user = auth.currentUser;
-                              if (user != null) {
-                                String currentUserId = user.uid;
-
-                                final CollectionReference detailsCollection =
-                                FirebaseFirestore.instance.collection('details');
-
-                                DocumentSnapshot detailsDoc =
-                                await detailsCollection.doc(currentUserId).get();
-
-                                if (detailsDoc.exists) {
-                                  Map<String, dynamic> detailsData = detailsDoc.data() as Map<String, dynamic>;
-
-                                  setState(() {
-                                    inputText = detailsData['shopName'] ?? '';
-                                    inputAddress = detailsData['address'] ?? '';
-                                    inputMobile = detailsData['vendorCode'] ?? '';
-                                    inputName = detailsData['vendorName'] ?? '';
-                                    _shopEditingController.text = inputText;
-                                    _addEditingController.text = inputAddress;
-                                    _nameEditingController.text = inputName;
-                                    _mobileEditingController.text = inputMobile;
-
-
-                                  });
-                                } else {
-                                  // Document doesn't exist
-                                  print('Details document not found.');
-                                }
-                              }
-                            } catch (e) {
-                              print('Error fetching details: $e');
-                            }
-                          },
+                          onPressed: () async {await fetchAndFillUserDetails();},
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.black,
                             backgroundColor: Colors.yellow[200], // Text color
@@ -813,55 +866,6 @@ class TextInputScreenState extends State<TextInputScreen> {
                         //Button to save the stack as a image onto the gallery as well as onto the cloud storage
                         ElevatedButton(
                           onPressed: () {
-                            Future<void> saveStack() async {
-                              // Check for permission to access the storage
-                              final PermissionStatus permissionStatus =
-                              await Permission.storage.request();
-                              if (permissionStatus.isGranted) {
-                                try {
-                                  // Capture the stack as an image
-                                  RenderRepaintBoundary boundary = stackKey.currentContext!
-                                      .findRenderObject() as RenderRepaintBoundary;
-                                  ui.Image image = await boundary.toImage();
-                                  ByteData? byteData =
-                                  await image.toByteData(format: ui.ImageByteFormat.png);
-                                  Uint8List bytes = byteData!.buffer.asUint8List();
-                                   if(user!= null)
-                                   {
-                                     final String imageName = '${DateTime.now().millisecondsSinceEpoch}.png';
-                                   firebase_storage.Reference storageReference = firebase_storage.FirebaseStorage.instance.ref().child('images/$imageName');
-                                   firebase_storage.UploadTask uploadTask = storageReference.putData(bytes);
-
-                                   await uploadTask.whenComplete(() async {
-                                     String imageUrl = await storageReference.getDownloadURL();
-                                     DatabaseService(uid: user.uid).updateConsumerDataWithImage(imageUrl);
-                                   });
-                                   }
-                                  // Save the image to the gallery
-                                  await ImageGallerySaver.saveImage(bytes);
-
-                                  // Show a success message
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Image saved to gallery')),
-                                  );
-                                } catch (e) {
-                                  // Show an error message
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Failed to save Image')),
-                                  );
-                                }
-                              } else {
-                                if (permissionStatus.isPermanentlyDenied) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Permission permanently denied')),
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Permission denied')),
-                                  );
-                                }
-                              }
-                            }
                             saveStack();
                           },
                           style: ElevatedButton.styleFrom(
@@ -908,12 +912,8 @@ class TextInputScreenState extends State<TextInputScreen> {
                         //Button to fetch and display the previously created posters by the user
                         ElevatedButton(
                             onPressed: (){
-                                      Future<void> loadSavedImages() async {
-                                      List<String> imageUrls = await DatabaseService(uid: user!.uid).getUserImageUrls();
-                                      setState(() {savedImageUrls = imageUrls;});
-                                      }
-                                      loadSavedImages();
-                                      },
+                              loadSavedImages();
+                              },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.white,
                             backgroundColor: Colors.cyan[400], // Text color
@@ -929,7 +929,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                     )
                   ],
                 ),
-              ),
+              ),//buttonsContainer
 
               //The space where the previously created posters by the user are displayed
               Column(
