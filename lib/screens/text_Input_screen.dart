@@ -198,8 +198,6 @@ class TextInputScreenState extends State<TextInputScreen> {
   }
 
 
-
-
   @override
   Widget build(BuildContext context) {
     Cansumer? user = Provider.of<Cansumer?>(context);
