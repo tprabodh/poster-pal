@@ -127,6 +127,7 @@ class TextInputScreenState extends State<TextInputScreen> {
   Color?  selectedColorPhone= Colors.black;
 
   final GlobalKey stackKey = GlobalKey();
+
   String? _selectedImage;
 
   final ImagePicker _picker = ImagePicker();
@@ -146,68 +147,55 @@ class TextInputScreenState extends State<TextInputScreen> {
   List<String> savedImageUrls = []; // List to store saved image URLs
 
 
-  // Function to fetch image URLs from Firebase Storage "models" folder
-  Future<List<String>> fetchModelImages() async {
-  List<String> imageUrls = [];
-
-  try {
-  firebase_storage.ListResult result =
-  await firebase_storage.FirebaseStorage.instance.ref('models/').listAll();
-
-  for (firebase_storage.Reference ref in result.items) {
-  String url = await ref.getDownloadURL();
-  imageUrls.add(url);
-  }
-  } catch (e) {
-  print('Error fetching model images: $e');
-  }
-
-  return imageUrls;
-  }
-
-//function to show the template options available
+  // Function to fetch image URLs from Firebase Storage "models" folder and display designs fetched
   Future<void> _showImageOptionsDialog() async {
-    List<String> modelImages = await fetchModelImages();
+    List<String> modelImages = [];
+    try {
+      firebase_storage.ListResult result = await firebase_storage.FirebaseStorage.instance.ref('models/').listAll();
+      for (firebase_storage.Reference ref in result.items) {
+        String url = await ref.getDownloadURL();
+        modelImages.add(url);
+      }
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Select Model Image'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: modelImages.asMap().entries.map((entry) {
-                int index = entry.key;
-                String imageUrl = entry.value;
-                return Card(
-                  elevation: 4,
-                  margin: EdgeInsets.symmetric(vertical: 8),
-                  child: ListTile(
-                    leading: Image.network(
-                      imageUrl,
-                      width: 80,
-                      height: 80,
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Select Model Image'),
+            content: Container(
+              width: double.maxFinite,
+              child: ListView.builder(
+                itemCount: modelImages.length,
+                itemBuilder: (context, index) {
+                  String imageUrl = modelImages[index];
+                  return Card(
+                    elevation: 4,
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: ListTile(
+                      leading: Image.network(
+                        imageUrl,
+                        width: 80,
+                        height: 80,
+                      ),
+                      title: Text('Model Image $index'),
+                      onTap: () {
+                        Navigator.of(context).pop(); // Close the dialog
+                        setState(() {
+                          _selectedImage = imageUrl;
+                        });
+                      },
                     ),
-                    title: Text('Model Image ${index + 1}'), // Dynamic title
-                    onTap: () {
-                      // Download the selected image and assign it to _selectedImage
-                      // _downloadAndSetSelectedImage(imageUrl);
-                      Navigator.of(context).pop(); // Close the dialog
-                      setState((){
-                        _selectedImage=imageUrl;
-                      });
-
-                    },
-                  ),
-                );
-              }).toList(),
+                  );
+                },
+              ),
             ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    } catch (e) {
+      print('Error fetching and showing model images: $e');
+    }
   }
-
 
 
 
@@ -265,6 +253,7 @@ class TextInputScreenState extends State<TextInputScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(height: 30.0,),
+
             TextButton(onPressed: () {  },
               child: const Text("Developer Details",
                 style: TextStyle(
@@ -918,6 +907,7 @@ class TextInputScreenState extends State<TextInputScreen> {
                   ],
                 ),
               ),
+
               //The space where the previously created posters by the user are displayed
               Column(
                 children: savedImageUrls.map((imageUrl) {
