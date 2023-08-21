@@ -12,7 +12,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:text1/constants/routes.dart';
-import 'package:text1/models/consumer.dart';
+import 'package:text1/models/app_user.dart';
 import 'package:text1/screens/expanded_image_view.dart';
 import 'package:text1/services/auth.dart';
 import 'package:text1/services/database.dart';
@@ -128,14 +128,10 @@ class TextInputScreenState extends State<TextInputScreen> {
 
   final GlobalKey stackKey = GlobalKey();
 
-  String? _selectedImage;
-
   final ImagePicker _picker = ImagePicker();
-
   final List<File> _selectedImages = [];
-
   //function to add a small logo
-  Future _addSmallLogo() async {
+  Future <void> _addSmallLogo() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
@@ -146,7 +142,7 @@ class TextInputScreenState extends State<TextInputScreen> {
 
   List<String> savedImageUrls = []; // List to store saved image URLs
 
-
+  String? _selectedImage;
   // Function to fetch image URLs from Firebase Storage "models" folder and display designs fetched
   Future<void> _showImageOptionsDialog() async {
     List<String> modelImages = [];
@@ -225,20 +221,18 @@ class TextInputScreenState extends State<TextInputScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Cansumer? user = Provider.of<Cansumer?>(context);
+    AppUser? user = Provider.of<AppUser?>(context);
     final AuthService _auth = AuthService();
+
     Future<void> saveStack() async {
       // Check for permission to access the storage
-      final PermissionStatus permissionStatus =
-      await Permission.storage.request();
+      final PermissionStatus permissionStatus = await Permission.storage.request();
       if (permissionStatus.isGranted) {
         try {
           // Capture the stack as an image
-          RenderRepaintBoundary boundary = stackKey.currentContext!
-              .findRenderObject() as RenderRepaintBoundary;
+          RenderRepaintBoundary boundary = stackKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
           ui.Image image = await boundary.toImage();
-          ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
+          ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
           Uint8List bytes = byteData!.buffer.asUint8List();
           if(user!= null)
           {
@@ -286,12 +280,8 @@ class TextInputScreenState extends State<TextInputScreen> {
         final User? user = auth.currentUser;
         if (user != null) {
           String currentUserId = user.uid;
-
-          final CollectionReference detailsCollection =
-          FirebaseFirestore.instance.collection('details');
-
-          DocumentSnapshot detailsDoc =
-          await detailsCollection.doc(currentUserId).get();
+          final CollectionReference detailsCollection = FirebaseFirestore.instance.collection('details');
+          DocumentSnapshot detailsDoc = await detailsCollection.doc(currentUserId).get();
 
           if (detailsDoc.exists) {
             Map<String, dynamic> detailsData =
