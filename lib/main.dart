@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<AppUser?>.value(
-      value: AuthService().consumer,
+      value: AuthService().appUser,
       initialData: null,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
