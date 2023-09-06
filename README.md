@@ -12,7 +12,7 @@ Poster Pal is a user-friendly and versatile poster maker app that empowers you t
 
 ## Features
 
-- **Intuitive Design Tools:** Create eye-catching posters with an array of design elements such as text, images, shapes, and backgrounds. The user-friendly drag-and-drop interface ensures a smooth and enjoyable design process.
+- **Intuitive Design Tools:** Create eye-catching posters with an array of design elements such as text, images, shapes, and backgrounds. The user-friendly interface ensures a smooth and enjoyable design process.
 
 - **Customizable Templates:** Jumpstart your creativity with a variety of pre-designed templates catering to various themes and occasions. Customize these templates to match your unique style.
 
