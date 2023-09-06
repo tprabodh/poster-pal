@@ -7,7 +7,7 @@ import 'package:text1/screens/phone_otp.dart';
 import 'package:text1/screens/phone_sign_in.dart';
 import 'package:text1/services/auth.dart';
 import 'package:text1/screens/text_Input_screen.dart';
-import 'package:text1/models/consumer.dart';
+import 'package:text1/models/app_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.isUserLoggedIn});
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<Cansumer?>.value(
+    return StreamProvider<AppUser?>.value(
       value: AuthService().consumer,
       initialData: null,
       child: MaterialApp(

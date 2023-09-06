@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:text1/constants/constants.dart';
 import 'package:text1/constants/routes.dart';
-import 'package:text1/models/consumer.dart';
+import 'package:text1/models/app_user.dart';
 import 'package:text1/screens/phone_sign_in.dart';
 import 'package:text1/services/auth.dart';
 import 'package:text1/services/database.dart';
@@ -90,8 +90,8 @@ class _PhoneOtpState extends State<PhoneOtp> {
                     await auth.signInWithCredential(credential);
 
                     // Get the authenticated user from the AuthService stream
-                    Cansumer? currentUser;
-                    StreamSubscription<Cansumer?>? subscription;
+                    AppUser? currentUser;
+                    StreamSubscription<AppUser?>? subscription;
 
                     subscription = AuthService().consumer.listen((user) async {
                       currentUser = user;
