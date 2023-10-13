@@ -21,9 +21,9 @@ class DatabaseService {
   Future<void> updateUserDetails(String consumerId) async{
     return await detailsCollection.doc(uid).set({
       'shopName':'RIYAZ CHICKEN',
-      'vendorName':'Riyaz',
+      'vendorName':'RIYAZ',
       'address':'#22,ABC building,BTM layout,NS palya,5th main,560006,Bengaluru',
-      'vendorCode':'+918074111222',
+      'vendorCode':'111111-222',
       'consumerId':consumerId,
     });
   }

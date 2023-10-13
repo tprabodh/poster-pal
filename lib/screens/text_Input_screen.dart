@@ -48,9 +48,9 @@ class TextInputScreenState extends State<TextInputScreen> {
   String submitName = '';
   //default font sizes
   double _fontSize = 38.0;
-  double _fontAdd = 12.0;
+  double _fontAdd = 13.0;
   double _fontName = 26.0;
-  double _fontPhone = 26.0;
+  double _fontPhone = 24.0;
   //text edit controllers for updating text onto text fields
   late TextEditingController _shopEditingController;
   late TextEditingController _addEditingController;
@@ -108,15 +108,15 @@ class TextInputScreenState extends State<TextInputScreen> {
 
   //default positions
   double shopl = 60.0;
-  double shopt = 70.0;
-  double addPositionl=10.0;
-  double addPositiont=115.0;
+  double shopt = 110.0;
+  double addPositionl=11.0;
+  double addPositiont=165.0;
   double  iconPositionl=170.0;
   double  iconPositiont=90.0;
-  double namePositionl=200.0;
-  double namePositiont=492.0;
-  double phonePositionl=180.0;
-  double phonePositiont=523.0;
+  double namePositionl=211.0;
+  double namePositiont=520.0;
+  double phonePositionl=255.0;
+  double phonePositiont=548.0;
 
   String? selectedOption;
 
