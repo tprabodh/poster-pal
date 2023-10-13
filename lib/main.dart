@@ -16,7 +16,7 @@ void main() async {
   // Initialize Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-//using SharedPreferences so that user is logged i until he explicitly logs out
+//using SharedPreferences so that user is logged in until he explicitly logs out
   final prefs = await SharedPreferences.getInstance();
   final isUserLoggedIn = prefs.getBool('isUserLoggedIn') ?? false;
 
@@ -30,11 +30,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<AppUser?>.value(
-      value: AuthService().consumer,
+      value: AuthService().appUser,
       initialData: null,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: isUserLoggedIn ? const TextInputScreen() : const PhoneSignIn(),
+        // TextInputScreen()
         routes: {
           MyRoute.homeRoute:(context)=>const TextInputScreen(),
           MyRoute.loginRoute:(context)=>const PhoneSignIn(),

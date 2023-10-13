@@ -5,7 +5,7 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
 //modifying the user object to get only the uid
-  AppUser? _consumerFromFirebase(User? user) {
+  AppUser? _appUserFromFirebase(User? user) {
     if (user == null) {
       return null;
     } else {
@@ -16,9 +16,9 @@ class AuthService {
   }
 
   //cansumer stream
-  Stream<AppUser?> get consumer {
+  Stream<AppUser?> get appUser {
     return _auth.authStateChanges()
-        .map((User? user) => _consumerFromFirebase(user));
+        .map((User? user) => _appUserFromFirebase(user));
   }
 
   //sign out

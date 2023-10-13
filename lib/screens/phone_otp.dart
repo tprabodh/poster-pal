@@ -93,7 +93,7 @@ class _PhoneOtpState extends State<PhoneOtp> {
                     AppUser? currentUser;
                     StreamSubscription<AppUser?>? subscription;
 
-                    subscription = AuthService().consumer.listen((user) async {
+                    subscription = AuthService().appUser.listen((user) async {
                       currentUser = user;
                       subscription?.cancel(); // Cancel the stream subscription
                       if (currentUser != null){
