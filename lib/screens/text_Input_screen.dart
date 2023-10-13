@@ -331,24 +331,24 @@ class TextInputScreenState extends State<TextInputScreen> {
         ),
         backgroundColor: Colors.blue[400],
         elevation: 0.0,
-        actions: <Widget>[
-          TextButton.icon(
-            icon: const Icon(
-              Icons.person,
-              color: Colors.black,
-            ),
-            label: const Text(
-              'LogOut',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
-            ),
-            onPressed: () async {
-              final prefs = await SharedPreferences.getInstance();
-              prefs.setBool('isUserLoggedIn', false);
-              await _auth.signOut();
-              Navigator.pushNamed(context, MyRoute.loginRoute);
-            },
-          ),
-        ],
+        // actions: <Widget>[
+        //   TextButton.icon(
+        //     icon: const Icon(
+        //       Icons.person,
+        //       color: Colors.black,
+        //     ),
+        //     label: const Text(
+        //       'LogOut',
+        //       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+        //     ),
+        //     onPressed: () async {
+        //       final prefs = await SharedPreferences.getInstance();
+        //       prefs.setBool('isUserLoggedIn', false);
+        //       await _auth.signOut();
+        //       Navigator.pushNamed(context, MyRoute.loginRoute);
+        //     },
+        //   ),
+        // ],
       ),
       drawer: Drawer(
         backgroundColor:  Colors.lightBlue[50],
@@ -961,7 +961,6 @@ class TextInputScreenState extends State<TextInputScreen> {
                               ),
                               child: const Text('Download to Gallery'),
                             ),
-
                           ],
                         ),
                       ),
