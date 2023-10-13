@@ -34,8 +34,7 @@ class MyApp extends StatelessWidget {
       initialData: null,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: isUserLoggedIn ? const TextInputScreen() : const PhoneSignIn(),
-        // TextInputScreen()
+        home: TextInputScreen(),
         routes: {
           MyRoute.homeRoute:(context)=>const TextInputScreen(),
           MyRoute.loginRoute:(context)=>const PhoneSignIn(),
